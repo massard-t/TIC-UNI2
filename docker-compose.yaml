@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  database:
+    image: mariadb:10.3
+    environment:
+      MYSQL_DATABASE: wp
+      MYSQL_PASSWORD: custom_admin_password
+      MYSQL_ROOT_PASSWORD: rootadm
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wp_password
+    volumes:
+      - db_content:/var/lib/mysql
+
+  wordpress:
+    image: wordpress
+    depends_on:
+      - database
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wp_password
+    links:
+      - database:mysql
+    ports:
+      - 8080:80
+
+volumes:
+  db_content:
