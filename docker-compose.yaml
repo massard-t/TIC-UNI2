@@ -6,8 +6,6 @@ services:
     image: bitnami/mariadb:10.1
     ports:
       - '3306'
-    deploy:
-      replicas: 2
     environment:
       MARIADB_DATABASE: wordpress
       MARIADB_USER: wordpress_user
@@ -43,30 +41,31 @@ services:
 
 
   wordpress:
-    image: wordpress:4.7.5-apache
+    build: ./wordpress
     depends_on:
-      - database
+      - database_master
     environment:
-      WORDPRESS_DB_HOST: database
-      WORDPRESS_DB_USER: root
-      WORDPRESS_DB_PASSWORD: rootadm
+      #WORDPRESS_DB_HOST: wordpress
+      #WORDPRESS_DB_USER: wordpress_user
+      #WORDPRESS_DB_PASSWORD: wp_password
+      WORDPRESS_DB_PASSWORD: root_password
     links:
-      - database:mysql
+      - database_master:mysql
     ports:
       - 80
 
-  #wordpress:
-    #image: wordpress:4.7.5-apache
-    #depends_on:
-      #- database
-    #environment:
-      #WORDPRESS_DB_HOST: mysql
-      #WORDPRESS_DB_USER: root
-      #WORDPRESS_DB_PASSWORD: rootadm
-    #links:
-      #- database:mysql
-    #ports:
-      #- 80
+#  wordpress:
+#    image: wordpress:4.7.5-apache
+#    depends_on:
+#      - database
+#    environment:
+#      WORDPRESS_DB_HOST: mysql
+#      WORDPRESS_DB_USER: wordpress_user
+#      WORDPRESS_DB_PASSWORD: wp_password
+#    links:
+#      - database:mysql
+#    ports:
+#      - 80
 
 volumes:
   bitnami_db_content:
