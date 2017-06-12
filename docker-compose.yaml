@@ -4,8 +4,9 @@ services:
   database_master:
     container_name: db_master
     image: bitnami/mariadb:10.1
+    restart: always
     ports:
-      - '3306'
+      - 3306
     environment:
       MARIADB_DATABASE: wordpress
       MARIADB_USER: wordpress_user
@@ -22,9 +23,10 @@ services:
     depends_on: 
       - database_master
     container_name: db_slave
+    restart: always
     image: bitnami/mariadb:10.1
     ports:
-      - '3306'
+      - 3306
     environment:
       MARIADB_DATABASE: wordpress
       MARIADB_USER: wordpress_user
@@ -40,19 +42,44 @@ services:
       - database_master:master
 
 
-  wordpress:
-    build: ./wordpress
+  wordpress_1:
+    image: wordpress:4.7.5-apache
+    container_name: wordpress_1
     depends_on:
       - database_master
+      - database_slave
     environment:
       #WORDPRESS_DB_HOST: wordpress
-      #WORDPRESS_DB_USER: wordpress_user
-      #WORDPRESS_DB_PASSWORD: wp_password
-      WORDPRESS_DB_PASSWORD: root_password
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wp_password
     links:
       - database_master:mysql
     ports:
       - 80
+    volumes:
+      - wp_content:/var/www/html
+
+  wordpress_2:
+    image: wordpress:4.7.5-apache
+    container_name: wordpress_2
+    depends_on:
+      - database_master
+      - database_slave
+      - wordpress_1
+    environment:
+      #WORDPRESS_DB_HOST: wordpress
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wp_password
+    links:
+      - database_master:mysql
+    ports:
+      - 80
+    volumes:
+      - wp_content:/var/www/html
+
+  proxy:
+    build: ./haproxy
+
 
 #  wordpress:
 #    image: wordpress:4.7.5-apache
