@@ -4,9 +4,13 @@ MAINTAINER Theo Massard <massar_t@etna-alternance.net>
 
 COPY install.sh /
 USER root
-RUN curl -o /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-      && chmod +x /install.sh && /install.sh
 
-RUN ls /
-USER 
+ENV DOCKERIZE_RELEASE v0.2.0/dockerize-linux-amd64-v0.2.0.tar.gz
+RUN curl -sL https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_RELEASE} \
+  | tar -C /usr/bin -xzvf -
+
+RUN apt-get update -y \
+    && apt-get install -y mysql-client
+ENTRYPOINT /install.sh
+
 

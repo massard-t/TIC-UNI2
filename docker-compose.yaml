@@ -79,6 +79,12 @@ services:
 
   proxy:
     build: ./haproxy
+    container_name: proxy
+    restart: always
+    links:
+      - wordpress_1:wp_one
+      - wordpress_2:wp_two
+
 
 
 #  wordpress:
