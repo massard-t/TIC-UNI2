@@ -49,7 +49,6 @@ services:
       - database_master
       - database_slave
     environment:
-      #WORDPRESS_DB_HOST: wordpress
       WORDPRESS_DB_USER: wordpress_user
       WORDPRESS_DB_PASSWORD: wp_password
     links:
@@ -67,7 +66,6 @@ services:
       - database_slave
       - wordpress_1
     environment:
-      #WORDPRESS_DB_HOST: wordpress
       WORDPRESS_DB_USER: wordpress_user
       WORDPRESS_DB_PASSWORD: wp_password
     links:
@@ -84,21 +82,9 @@ services:
     links:
       - wordpress_1:wp_one
       - wordpress_2:wp_two
-
-
-
-#  wordpress:
-#    image: wordpress:4.7.5-apache
-#    depends_on:
-#      - database
-#    environment:
-#      WORDPRESS_DB_HOST: mysql
-#      WORDPRESS_DB_USER: wordpress_user
-#      WORDPRESS_DB_PASSWORD: wp_password
-#    links:
-#      - database:mysql
-#    ports:
-#      - 80
+    ports:
+      - 80:80
+      - 443:443
 
 volumes:
   bitnami_db_content:
