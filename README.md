@@ -3,13 +3,16 @@
 > massar_t
 > coquar_a
 
+
+> Just a school project, nothing much.
+> Please Prep'ETNA's students, no git-clone. Contact me I love to give advices.
+
 ## Summary
 
 This project has the following containers:
 - Haproxy server - proxy
 - MariaDB servers - Built as replicas (master/slave)
 - Two Wordpresses
-
 
 ### Haproxy
 
